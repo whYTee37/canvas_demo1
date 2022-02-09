@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport"  content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
     <title>画板</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="canvas" width="100" height="100"></canvas>
+
+    <canvas id="canvas" width="100" height="100" ></canvas>
+
     <script>
+
         function DrawLine(x1,y1,x2,y2){
             ctx.beginPath();
             ctx.moveTo(x1,y1);
@@ -28,18 +32,38 @@
 
         let painting = false;//用于标记鼠标是否按住；初始为false，鼠标按下时为true，放开后又变为false
         let isTouchDevice = "ontouchstart" in document.documentElement;//判断设备是否是触屏
-        let last = 0;
-
+        let last = [];
+        let last1 = [];
+        let painting1 = false;
+ 
         if(isTouchDevice){
-            // console.log("我进触摸界面啦")
-            canvas.ontouchmove = (e)=>{
-                let x = e.touches[0].clientX;
-                let y = e.touches[0].clientY;
-                ctx.beginPath();
-                ctx.arc(x, y, 4, 0, 2 * Math.PI);
-                ctx.stroke();
-                ctx.fill();
+            console.log("我进触摸界面啦");
+
+            canvas.ontouchstart=(e)=>{
+                last1=[e.touches[0].clientX,e.touches[0].clientY];
+                painting1 = true;
             }
+
+            canvas.ontouchmove = (e)=>{
+                    if(painting1)
+                    {
+                        let x = e.touches[0].clientX;
+                        let y = e.touches[0].clientY;
+                    
+                        //console.log(last1);
+                        // ctx.beginPath();
+                        // ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                        // ctx.stroke();
+                        // ctx.fill();
+                        DrawLine(last1[0],last1[1],x,y);
+                        last1=[e.touches[0].clientX,e.touches[0].clientY];
+                    }
+            }
+
+            canvas.ontouchend = ()=>{
+                painting1 = false;
+            }
+
         }else{
             canvas.onmousedown = (e)=>{
             painting = true;

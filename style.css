@@ -5,4 +5,12 @@
 }
 #canvas {
   display: block;
+  position: fixed;
+}
+
+body {
+  overflow: hidden; /*解决在手机上页面会滚动的bug*/
+  position: fixed;
+  top: 0;
+  left: 0;
 }
